@@ -1,6 +1,8 @@
-console.log("=============");
+
 
 import ymaps from "ymaps";
+var curr_lat;
+var curr_lng;
 
 jQuery('body')
     .on('click', '.dropdown-menu.emp a', function() {
@@ -21,40 +23,40 @@ $('.item ul').on('click', 'li', function(e) {
 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
 //select2 district search
-console.log(CSRF_TOKEN);
 
-    $( "#selUser" ).select2({
 
-        ajax: {
-            url: "select2-autocomplete-ajax",
-            type: "post",
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
+$( "#selUser" ).select2({
 
-                var districtId = $('#districtIdofCity').val();
-                var  regionId = $('#regionIdofCity').val();
-                regionId = (regionId) ? regionId * 1 : 0;
-                districtId = (districtId) ? districtId * 1 : 0;
-                return {
-                    _token: CSRF_TOKEN,
-                    search: params.term, // search term
-                    regionId:regionId,
-                    districtId:districtId
+    ajax: {
+        url: "select2-autocomplete-ajax",
+        type: "post",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
 
-                };
-            },
-            processResults: function (response){
+            var districtId = $('#districtIdofCity').val();
+            var  regionId = $('#regionIdofCity').val();
+            regionId = (regionId) ? regionId * 1 : 0;
+            districtId = (districtId) ? districtId * 1 : 0;
+            return {
+                _token: CSRF_TOKEN,
+                search: params.term, // search term
+                regionId:regionId,
+                districtId:districtId
 
-                console.log(response.length)
-                return {
-                    results: response
-                };
-            },
-            cache: true
-        }
+            };
+        },
+        processResults: function (response){
 
-    });
+
+            return {
+                results: response
+            };
+        },
+        cache: true
+    }
+
+});
 
 
 
@@ -109,8 +111,8 @@ function filterQuery(name) {
         _token: _token
     };
 
-    console.log(list);
-    console.log(dataForm);
+
+
 
     $.ajax({
         url: 'regions/search',
@@ -121,7 +123,7 @@ function filterQuery(name) {
         .done(function(data) {
 
             // show the response
-            console.log(data);
+
             let dataRegions = data[0];
             let dataDistricts = data[1];
             let dataCities = data[2];
@@ -129,10 +131,10 @@ function filterQuery(name) {
             let district_name = dataCities[dataCities.length-1];
             dataCities.pop();
             dataCities.pop();
-            console.log(region_name+ " ",  district_name);
+
             // for(let key in dataRegions){
             //      //$("#regions").append(`<li class="list-group-item" data-regions-id="${key['id']}">${key['name']}</li>`);
-            //     console.log(key["name"]);
+            //
             // }
             if (list === "groups") {
 
@@ -141,7 +143,7 @@ function filterQuery(name) {
                 $('#districts').children().remove();
                 dataRegions.forEach(function(key) {
                     $("#regions").append(`<li class="list-group-item" data-region-id="${key['id']}">${key['name']}</li>`);
-                    //console.log(key);
+                    //
                 });
 
             } else if (list === "regions") {
@@ -151,20 +153,20 @@ function filterQuery(name) {
 
                 dataDistricts.forEach(function(key) {
                     $("#districts").append(`<li class="list-group-item" data-district-id="${key['id']}">${key['name']}</li>`);
-                    // console.log(key["name"]);
+                    //
                 });
                 //$('#cities').children().remove();
                 dataCities.forEach(function(key) {
                     //8888
-                    $("#cities").append(`<li class="city list-group-item" data-city-id="${key['id']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-newlng="${key['new_lng']}" data-city-newlat="${key['new_lat']}"><div class="city">${key['name']}</div><div class="belong"></div></li>`);
-                    // console.log(key["name"]);
+                    $("#cities").append(`<li class="city list-group-item" data-city-id="${key['id']}" data-actual="${key['actual']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-new_lng="${key['new_lng']}" data-city-new_lat="${key['new_lat']}"><div class="city">${key['name']}</div><div class="belong"></div></li>`);
+                    //
                 });
             }
             if (list === "districts") {
                 $('#cities').children().remove();
                 dataCities.forEach(function(key) {
-                    $("#cities").append(`<li class="city list-group-item" data-city-id="${key['id']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-newlng="${key['new_lng']}" data-city-newlat="${key['new_lat']}"><div class="city">${key['name']}</div><div class="belong"></div></li>`);
-                    // console.log(key["name"]);
+                    $("#cities").append(`<li class="city list-group-item" data-city-id="${key['id']}" data-actual="${key['actual']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-new_lng="${key['new_lng']}" data-city-new_lat="${key['new_lat']}"><div class="city">${key['name']}</div><div class="belong"></div></li>`);
+                    //
                 });
             }
 
@@ -173,15 +175,15 @@ function filterQuery(name) {
 
         })
         .fail(function(data) {
-            console.log(data);
+
         });
 
 
 }
 $("ul").on("click", "li.region.list-group-item.searched", function() {
-    console.log($(this).data("region-id"));
+
     region_group($(this).data("region-id"),function(output){
-        console.log('group_id:' + output);
+
         $("ul#groups").children().removeClass("active");
         $(`ul#groups li[data-group-id="${output}"]`).addClass("active");
     });
@@ -189,10 +191,10 @@ $("ul").on("click", "li.region.list-group-item.searched", function() {
 
 });
 $("ul").on("click", "li.district.list-group-item.searched", function() {
-    console.log(7777);
-    console.log($(this).data("district-id"));
+
+
     distict_group($(this).data("district-id"),function(output){
-        console.log('district-id:' + output);
+
         $('#regions').children().remove();
         $("#regions").append(`<li class="list-group-item active" data-region-id="${output["region"][0]["id"]}">${output["region"][0]["name"]}</li>`);
 
@@ -205,26 +207,44 @@ $("ul").on("click", "li.district.list-group-item.searched", function() {
 
 
 });
-var newlng;
-var newlat;
+var new_lng;
+var new_lat;
 var lng;
 var lat;
 var clicked ;
 $("ul").on("click", "li.city.list-group-item", function() {
-    console.log(99999);
 
     let val = $(this).children().first().text();
     let id = $(this).data('city-id');
-     lng = $(this).data('city-lng');
-     lat = $(this).data('city-lat');
-    newlng = $(this).data('city-newlng');
-    newlat = $(this).data('city-newlat');
+    let actual =$(this).data('actual');
+    actual == 'old' ? (
+        $("#radio1").prop("checked", true)
+        ) : (
+        $("#radio2").prop("checked", true)
+    );
+
+
+
+    lng = $(this).data('city-lng');
+    lat = $(this).data('city-lat');
+
+
+    // new_lng = $(this).data('city-'+actual+'lng');
+    // new_lat = $(this).data('city-'+actual+'lat');
+    new_lng = $(this).data('city-new_lng');
+    new_lat = $(this).data('city-new_lat');
+
+
+
+    curr_lat = (actual=='old') ? lat : new_lat;
+    curr_lng = (actual=='old') ? lng : new_lng;
+
     var searchcity = $('#searchcity').val();
 
 
     if(searchcity!=""){
         city_region_distric($(this).data("city-id"),function(output){
-            console.log(output);
+
             region(output[0]["region_id"],function (region) {
                 $('#regions').children().remove();
                 $("#regions").append(`<li class="list-group-item active" data-region-id="${region[0]["id"]}">${region[0]["name"]}</li>`);
@@ -233,17 +253,17 @@ $("ul").on("click", "li.city.list-group-item", function() {
                 $("ul#groups").children().removeClass("active");
                 $(`ul#groups li[data-group-id="${group}"]`).addClass("active");
 
-                console.log(output);
             });
             district(output[0]["district_id"],function (district) {
-                console.log(district);
+
                 $('#districts').children().remove();
                 $("#districts").append(`<li class="list-group-item active" data-district-id="${district[0]["id"]}">${district[0]["name"]}</li>`);
             });
 
         });
     }
-    $("#radio2").prop("checked", true);
+
+
     $('#city_content').children().remove();
     $('#mapYandex').children().remove();
     $('.newlat').children().remove();
@@ -251,19 +271,20 @@ $("ul").on("click", "li.city.list-group-item", function() {
     $('.somediv').children().remove();
     $("#mapGoogle").children().remove();
     $("#city_content").append(`<h1>${val}</h1>`);
-    $(".newlat").append(`<span>Lat: ${newlat}</span>`);
-    $(".newlng").append(`<span>Lng: ${newlng}</span>`);
+    $(".newlat").append(`<span>Lat: ${ curr_lat }</span>`);
+    $(".newlng").append(`<span>Lng: ${ curr_lng }</span>`);
+
 //https://www.google.com/maps/@42.8731421,74.6283312,15z
     const app = document.getElementById("mapYandex");
     const button = document.createElement("button");
     button.innerText = "Load map";
     //app.appendChild(button);
-    $("#mapGoogle").append(`<a href="https://www.google.com/maps/@${newlat},${newlng},15z" target="_blank">GoogleMap</a>`);
-    $('.somediv').append(`<a  href="https://yandex.ru/maps/?from=api-maps&ll=${newlng}%2C${newlat}&origin=jsapi_2_1_78&z=12,4" target="_blank">YandexMap</a>`);
-    console.log("calling click");
+    $("#mapGoogle").append(`<a href="https://www.google.com/maps/@${curr_lat},${curr_lng},15z" target="_blank">GoogleMap</a>`);
+    $('.somediv').append(`<a  href="https://yandex.ru/maps/?from=api-maps&ll=${curr_lng}%2C${curr_lat}&origin=jsapi_2_1_78&z=12,4" target="_blank">YandexMap</a>`);
+
     clicked = true;
     if(clicked){
-        clickButton();
+        showMap();
     }
 
 
@@ -272,9 +293,9 @@ $("ul").on("click", "li.city.list-group-item", function() {
 
 
 });
-function clickButton(){
-    console.log("inside function out");
-    console.log(newlat + " + " + newlng);
+function showMap(){
+
+
     button.addEventListener("click", async function() {
 
         if(clicked){
@@ -283,10 +304,10 @@ function clickButton(){
             $('#mapYandex').children().remove();
             try {
                 //$('#mapYandex').children().remove();
-                const lat = newlat;
-                const lng = newlng;
+                const lat = curr_lat;
+                const lng = curr_lng;
                 const maps = await ymaps.load('https://api-maps.yandex.ru/2.1/?lang=ru_RU');
-                console.log(newlat + " - " + newlng);
+
                 const mapContainer = document.getElementById("mapYandex");
 
                 mapContainer.style.height = "512px";
@@ -314,34 +335,36 @@ $('input[type=radio][name=geodata]').change(function() {
     clicked = true;
     $('.newlat').children().remove();
     $('.newlng').children().remove();
-    let templat = newlat;
-    let templng = newlng;
+
     $('#mapYandex').children().remove();
     if (this.value == 'old') {
         const app = document.getElementById("mapYandex");
         const button = document.createElement("button");
-        newlat = lat;
-        newlng = lng;
-        console.log(newlat + " " + newlng);
-        $("#mapGoogle").append(`<a href="https://www.google.com/maps/@${newlat},${newlng},15z" target="_blank">GoogleMap</a>`);
-        $('.somediv').append(`<a  href="https://yandex.ru/maps/?from=api-maps&ll=${newlng}%2C${newlat}&origin=jsapi_2_1_78&z=12,4" target="_blank">YandexMap</a>`);
-        clickButton();
+        curr_lat = lat;
+        curr_lng = lng;
+        console.log('old')
+
+        $("#mapGoogle").append(`<a href="https://www.google.com/maps/@${curr_lat},${curr_lng},15z" target="_blank">GoogleMap</a>`);
+        $('.somediv').append(`<a  href="https://yandex.ru/maps/?from=api-maps&ll=${curr_lng}%2C${curr_lat}&origin=jsapi_2_1_78&z=12,4" target="_blank">YandexMap</a>`);
+        showMap();
 
 
     }
     else if (this.value == 'new') {
+        curr_lat = new_lat;
+        curr_lng = new_lng;
+        console.log('new')
         $('#mapYandex').children().remove();
         const app = document.getElementById("mapYandex");
         const button = document.createElement("button");
-        console.log(newlat + " " + newlng);
-        $("#mapGoogle").append(`<a href="https://www.google.com/maps/@${newlat},${newlng},15z" target="_blank">GoogleMap</a>`);
-        $('.somediv').append(`<a  href="https://yandex.ru/maps/?from=api-maps&ll=${newlng}%2C${newlat}&origin=jsapi_2_1_78&z=12,4" target="_blank">YandexMap</a>`);
-        clickButton();
+
+        $("#mapGoogle").append(`<a href="https://www.google.com/maps/@${curr_lat},${curr_lng},15z" target="_blank">GoogleMap</a>`);
+        $('.somediv').append(`<a  href="https://yandex.ru/maps/?from=api-maps&ll=${curr_lng}%2C${curr_lat}&origin=jsapi_2_1_78&z=12,4" target="_blank">YandexMap</a>`);
+        showMap();
     }
-    $(".newlat").append(`<span>Lat: ${newlat}</span>`);
-    $(".newlng").append(`<span>Lng: ${newlng}</span>`);
-    newlat = templat;
-    newlng = templng;
+    $(".newlat").append(`<span>Lat: ${curr_lat}</span>`);
+    $(".newlng").append(`<span>Lng: ${curr_lng}</span>`);
+
 });
 
 
@@ -354,12 +377,12 @@ function  region_group(id,handleData) {
 
     })
         .done(function (data) {
-            //console.log(data);
+            //
             handleData(data);
 
         })
         .fail(function () {
-            console.log("Posting failed.");
+
         });
 }
 function  distict_group(id,handleData) {
@@ -369,12 +392,12 @@ function  distict_group(id,handleData) {
 
     })
         .done(function (data) {
-            console.log(data);
+
             handleData(data);
 
         })
         .fail(function (data) {
-            console.log(data);
+
         });
 }
 
@@ -385,12 +408,12 @@ function  city_region_distric(id,handleData) {
 
     })
         .done(function (data) {
-            console.log(data);
+
             handleData(data);
 
         })
         .fail(function (data) {
-            console.log(data);
+
         });
 
 }
@@ -404,7 +427,7 @@ function region(id,handleData) {
             handleData(data);
         })
         .fail(function () {
-            console.log("Posting failed.");
+
         });
 }
 function district(id,handleData) {
@@ -417,7 +440,7 @@ function district(id,handleData) {
             handleData(data);
         })
         .fail(function () {
-            console.log("Posting failed.");
+
         });
 }
 
@@ -425,18 +448,18 @@ $(document).ready(function() {
     $("ul").on("dblclick", "li.city.list-group-item.active", function() {
 
         let val = $(this).children().first().text();
-        console.log($(this).text());
+
         let id = $(this).data('city-id');
         let lng = $(this).data('city-lng');
         let lat = $(this).data('city-lat');
-        let newlng = $(this).data('city-newlng');
-        let newlat = $(this).data('city-newlat');
+        let new_lng = $(this).data('city-new_lng');
+        let new_lat = $(this).data('city-new_lat');
         $('.modal-body.city').children().remove();
         $(".modal-body.city").append(`<input id="inputCity" class="form-control mr-sm-2 w-100" value="${val}" data-id="${id}" type="text"/>`);
         $("#elng").val(`${lng}`);
         $("#elat").val(`${lat}`);
-        $("#newlng").val(`${newlng}`);
-        $("#newlat").val(`${newlat}`);
+        $("#newlng").val(`${new_lng}`);
+        $("#newlat").val(`${new_lat}`);
 
         $('#exampleModal').modal('toggle');
     });
@@ -460,7 +483,7 @@ $("#refresh").on("click", function() {
     window.location.reload();
 });
 $("#buttonAddDistrict").on("click", function() {
-    console.log("add District");
+
     let regionId = $('#regions > li.active').data('region-id');
     regionId = (regionId) ? regionId * 1 : 0;
     if(regionId==0){
@@ -475,40 +498,40 @@ $("#buttonAddDistrict").on("click", function() {
 
 $("#buttonAddCity").on("click", function() {
 
-    console.log("add City");
+
     let regionId = $('#regions > li.active').data('region-id');
     let districtId = $('#districts > li.active').data('district-id');
     regionId = (regionId) ? regionId * 1 : 0;
     districtId = (districtId) ? districtId * 1 : 0;
-    console.log(regionId);
+
 
     if(regionId==0){
         alert('Пожалуйста выберите регион');
         return;
     }
-        $('#addCity').modal('toggle');
-        let dataForm = {
-            region: regionId,
-            district: districtId
-        };
-        console.log(dataForm);
-        $.ajax({
-            url: `region/${regionId}`,
-            type: 'get',
+    $('#addCity').modal('toggle');
+    let dataForm = {
+        region: regionId,
+        district: districtId
+    };
+
+    $.ajax({
+        url: `region/${regionId}`,
+        type: 'get',
+
+    })
+        .done(function (data) {
+
+
+            $('.modal-body.addCity').find(".form-group.mk").children().remove();
+            $(".modal-body.addCity").children().first().append(`<span data-region-id="${data[0]["id"]}" id="region-name">${data[0]["name"]}</span>`);
+            $(".modal-body.addCity").children().first().append(`<input id="districtIdofCity" type="hidden" value="${districtId}">`);
+            $(".modal-body.addCity").children().first().append(`<input id="regionIdofCity" type="hidden" value="${regionId}">`);
 
         })
-            .done(function (data) {
-                console.log("region");
+        .fail(function () {
 
-                $('.modal-body.addCity').find(".form-group.mk").children().remove();
-                $(".modal-body.addCity").children().first().append(`<span data-region-id="${data[0]["id"]}" id="region-name">${data[0]["name"]}</span>`);
-                $(".modal-body.addCity").children().first().append(`<input id="districtIdofCity" type="hidden" value="${districtId}">`);
-                $(".modal-body.addCity").children().first().append(`<input id="regionIdofCity" type="hidden" value="${regionId}">`);
-
-            })
-            .fail(function () {
-                console.log("Posting failed.");
-            });
+        });
 
 });
 //region/{id}
@@ -520,7 +543,7 @@ $("#AddDistrictbutton").on("click", function() {
     let districtIdofCity = $("#districtIdofCity").val();
     let regionId = $('#regions > li.active').data('region-id');
     regionId = (regionId) ? regionId * 1 : 0;
-    console.log(regionId)
+
     let formValue1 = {
         regionId: regionId,
         district:district,
@@ -535,8 +558,8 @@ $("#AddDistrictbutton").on("click", function() {
 
     })
         .done(function(data) {
-            console.log(data[0]);
-            //console.log(data);
+
+            //
 
             $('.messages').children().remove();
             $(".messages").append(`<div class="alert alert-success" role="alert">Успешно Добавлено</div>`);
@@ -545,7 +568,7 @@ $("#AddDistrictbutton").on("click", function() {
             $("#districts").prepend(`<li class="district list-group-item active" data-district-id="${data[0]['id']}">${data[0]['name']}</li>`);
         })
         .fail(function(data) {
-            console.log(data);
+
         });
     $('#addDistrict').modal('toggle');
 
@@ -574,18 +597,18 @@ $("#AddCitybutton").on("click", function() {
 
     })
         .done(function(data) {
-            console.log(data);
-            //console.log(data);
+
+            //
 
             $('.messages').children().remove();
             $(".messages").append(`<div class="alert alert-success" role="alert">${data}</div>`);
 
         })
         .fail(function() {
-            console.log("Posting failed.");
+
         });
     $('#addCity').modal('toggle');
-    console.log(formValue1);
+
 });
 
 $("#deleteCity").on("click", function() {
@@ -604,8 +627,8 @@ $("#deleteCity").on("click", function() {
 
         })
             .done(function (data) {
-                console.log("deleted");
-                //console.log(data);
+
+                //
                 $('#cities').children().remove();
                 $('.messages').children().remove();
                 $(".messages").append(`<div class="alert alert-success" role="alert">${data}</div>`);
@@ -613,7 +636,7 @@ $("#deleteCity").on("click", function() {
 
             })
             .fail(function () {
-                console.log("Posting failed.");
+
             });
         $('#exampleModal').modal('toggle');
     }
@@ -631,7 +654,7 @@ $("#deleteDistrict").on("click", function() {
 
         })
             .done(function (data) {
-                console.log("deleted");
+
                 $('#districts').children().remove();
                 $('.messages').children().remove();
                 $(".messages").append(`<div class="alert alert-success" role="alert">${data}</div>`);
@@ -639,7 +662,7 @@ $("#deleteDistrict").on("click", function() {
 
             })
             .fail(function () {
-                console.log("Posting failed.");
+
             });
         $('#districtEditModal').modal('toggle');
     }
@@ -657,7 +680,7 @@ $("#UpdateDistrict").on("click", function() {
             name: $("#inputDistrict").val(),
             _token: _token
         };
-        console.log(id)
+
 
         $("ul#districts > li.list-group-item.active").html($("#inputDistrict").val());
 
@@ -671,58 +694,58 @@ $("#UpdateDistrict").on("click", function() {
 
 
             .done(function (data) {
-                console.log("updated");
-                //console.log(data);
+
+                //
                 $('.messages').children().remove();
                 $(".messages").append(`<div class="alert alert-success" role="alert">${data}</div>`);
             })
             .fail(function () {
-                console.log("Posting failed.");
+
             });
         $('#districtEditModal').modal('toggle');
     }
 });
-    $("#UpdateCity").on("click", function() {
+$("#UpdateCity").on("click", function() {
     // var list = wrapper.find('input').map(function() {
     //     return $(this).val();
     // }).get();
-        if (confirm('Редактировать ?')) {
-            let id = $("#inputCity").data('id');
-            let _token = $('meta[name="csrf-token"]').attr('content');
-            let formValue1 = {
-                name: $("#inputCity").val(),
-                lng: $("#elng").val(),
-                lat: $("#elat").val(),
-                _token: _token
-            };
-            $("li.city.list-group-item.active").html($("#inputCity").val());
-            $("li.city.list-group-item.active").data("city-lat", $("#elat").val());
-            $("li.city.list-group-item.active").data("city-lng", $("#elng").val());
+    if (confirm('Редактировать ?')) {
+        let id = $("#inputCity").data('id');
+        let _token = $('meta[name="csrf-token"]').attr('content');
+        let formValue1 = {
+            name: $("#inputCity").val(),
+            lng: $("#elng").val(),
+            lat: $("#elat").val(),
+            _token: _token
+        };
+        $("li.city.list-group-item.active").html($("#inputCity").val());
+        $("li.city.list-group-item.active").data("city-lat", $("#elat").val());
+        $("li.city.list-group-item.active").data("city-lng", $("#elng").val());
 
 
-            $.ajax({
-                url: `city/update/${id}`,
-                type: 'post',
-                data: formValue1
+        $.ajax({
+            url: `city/update/${id}`,
+            type: 'post',
+            data: formValue1
+        })
+
+
+            .done(function (data) {
+
+                //
+                $('.messages').children().remove();
+                $(".messages").append(`<div class="alert alert-success" role="alert">${data}</div>`);
             })
+            .fail(function () {
 
-
-                .done(function (data) {
-                    console.log("updated");
-                    //console.log(data);
-                    $('.messages').children().remove();
-                    $(".messages").append(`<div class="alert alert-success" role="alert">${data}</div>`);
-                })
-                .fail(function () {
-                    console.log("Posting failed.");
-                });
-            $('#exampleModal').modal('toggle');
-        }
+            });
+        $('#exampleModal').modal('toggle');
+    }
 });
 
 //Searching region
 $('#searchregion').on('keyup', function() {
-    console.log("search from region");
+
     let groupId = $('#groups > li.active').data('group-id');
     groupId = (groupId) ? groupId * 1 : 0;
     let value = $(this).val();
@@ -740,10 +763,10 @@ $('#searchregion').on('keyup', function() {
             data: formValue
         })
             .done(function(data) {
-                //console.log("basck");
-                console.log(data);
+                //
+
                 if (data.length == 0) {
-                    console.log("empty query");
+
                     $('#regions').children().remove();
                     $("#regions").append(`<li class="list-district-item">Ничего не найдено...</li>`);
                 } else {
@@ -751,13 +774,13 @@ $('#searchregion').on('keyup', function() {
                         $('#regions').children().remove();
                         data.forEach(function(key) {
                             $("#regions").append(`<li class="region list-group-item searched active" data-region-id="${key['id']}">${key['name']}</li>`);
-                            //console.log(key);
+                            //
                         });
                     }else{
                         $('#regions').children().remove();
                         data.forEach(function(key) {
                             $("#regions").append(`<li class="region list-group-item searched" data-region-id="${key['id']}">${key['name']}</li>`);
-                            //console.log(key);
+                            //
                         });
                     }
                 }
@@ -766,7 +789,7 @@ $('#searchregion').on('keyup', function() {
 
             })
             .fail(function(data) {
-                console.log(data);
+
             });
     }else if (value.length == 0) {
         $('ul#regions').children().remove();
@@ -786,7 +809,7 @@ $('#searchdistrict').on('keyup', function() {
     let _token = $('meta[name="csrf-token"]').attr('content');
 
 
-    console.log("search from district");
+
     let value = $(this).val();
     if (value.length > 2) {
 
@@ -803,22 +826,22 @@ $('#searchdistrict').on('keyup', function() {
             data: formValue
         })
             .done(function(data) {
-                console.log(data);
+
                 if (data.length == 0) {
-                    console.log("empty query");
+
                     $('#districts').children().remove();
                     $("#districts").append(`<li class="list-group-item">Ничего не найдено...</li>`);
                 } else {
                     $('#districts').children().remove();
                     data.forEach(function(key) {
                         $("#districts").append(`<li class="district list-group-item searched" data-district-id="${key['id']}">${key['name']}</li>`);
-                        //console.log(key);
+                        //
                     });
                 }
 
             })
             .fail(function(data) {
-                console.log(data);
+
             });
     }else if (value.length == 0) {
         $('ul#districts').children().remove();
@@ -826,7 +849,7 @@ $('#searchdistrict').on('keyup', function() {
 
 });
 $('#searchgroup').on('keyup', function() {
-    console.log("search from group");
+
     let value = $(this).val();
     if (value.length > 2) {
         let _token = $('meta[name="csrf-token"]').attr('content');
@@ -841,20 +864,20 @@ $('#searchgroup').on('keyup', function() {
             data: formValue
         })
             .done(function(data) {
-                //console.log("basck");
-                console.log(data);
+                //
+
 
 
 
             })
             .fail(function(data) {
-                console.log(data);
+
             });
     }
 
 });
 $('#searchcity').on('keyup', function() {
-    console.log("------");
+
     let value = $(this).val();
     if (value.length > 2) {
 
@@ -878,34 +901,35 @@ $('#searchcity').on('keyup', function() {
 
         };
 
-        //console.log(formValue);
+        //
         $.ajax({
             url: 'autocomplete-ajax-city',
             type: 'post',
             data: formValue
         })
             .done(function(data) {
-                //console.log("basck");
-                console.log(data);
+                //
+               //
                 if (data.length == 0) {
-                    console.log("empty query");
+
                     $('#cities').children().remove();
                     $("#cities").append(`<li class="list-group-item">Ничего не найдено...</li>`);
                 } else {
                     $('#cities').children().remove();
                     data.forEach(function(key) {
+
                         let region_name = key['region_name'];
                         let district_name = key['district_name'];
-                        //$("#cities").append(`<li class="city list-group-item searched" data-city-id="${key['id']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-newlng="${key['new_lng']}" data-city-newlat="${key['new_lat']}">${key['name']}</li>`);
-                        $("#cities").append(`<li class="city list-group-item" data-city-id="${key['id']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-newlng="${key['new_lng']}" data-city-newlat="${key['new_lat']}"><div class="city">${key['name']}</div><div class="belong">${region_name}, ${district_name}</div></li>`);
-                         //console.log(key);
+                        //$("#cities").append(`<li class="city list-group-item searched" data-city-id="${key['id']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-new_lng="${key['new_lng']}" data-city-new_lat="${key['new_lat']}">${key['name']}</li>`);
+                        $("#cities").append(`<li class="city list-group-item" data-city-id="${key['id']}" data-actual="${key['actual']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-new_lng="${key['new_lng']}" data-city-new_lat="${key['new_lat']}"><div class="city">${key['name']}</div><div class="belong">${region_name}, ${district_name}</div></li>`);
+                        //
                     });
                 }
 
 
             })
             .fail(function(data) {
-                console.log(data);
+
             });
 
     } else if (value.length == 0) {
@@ -917,5 +941,19 @@ $('#searchcity').on('keyup', function() {
 
 
 //$_post['dataForm']['group']
+function  ajaxQuery(id,handleData,address) {
+    $.ajax({
+        url: `${address}${id}`,
+        type: 'get'
 
+    })
+        .done(function (data) {
+            //
+            handleData(data);
+
+        })
+        .fail(function () {
+
+        });
+}
 

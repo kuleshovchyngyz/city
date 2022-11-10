@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\geo_cities;
+use App\support\SetActualCoordinates;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -37,13 +39,13 @@ class CityController extends Controller
     {
         $city =  DB::table("geo_cities")
             ->insert([
-            'name' => $request['city'],
-            'lng' => $request['lng'],
-            'lat' => $request['lat'],
-            'region_id'=> $request['region'],
-            'district_id'=> $request['district'],
-            'timestamp' => Carbon::now()->timestamp
-        ]);
+                'name' => $request['city'],
+                'lng' => $request['lng'],
+                'lat' => $request['lat'],
+                'region_id'=> $request['region'],
+                'district_id'=> $request['district'],
+                'timestamp' => Carbon::now()->timestamp
+            ]);
         return response()->json("Успешно Добавлено");
         //return response()->json($city);
     }
@@ -62,8 +64,8 @@ class CityController extends Controller
     {
         $data = ['status' => '', 'city' => []];
         $count = DB::table('geo_cities')
-           ->where("timestamp",">",$id)
-           ->count();
+            ->where("timestamp",">",$id)
+            ->count();
         if(strlen($id)!=10||$count>1000){
             $data['status'] = 'error';
             return response()->json($data);
@@ -72,8 +74,8 @@ class CityController extends Controller
             ->select("*")
             ->where("timestamp",">",$id)
             ->get()->toArray();
-              $data['status'] = 'success';
-            $data['city'] = $cityData;
+        $data['status'] = 'success';
+        $data['city'] = $cityData;
         return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
 
     }
@@ -128,7 +130,21 @@ class CityController extends Controller
             ]);
         return response()->json("Успешно обновлено");
     }
-
+    public function setActual($id)
+    {
+        $city = geo_cities::find($id);
+        $city->actual = 'new_';
+        if(!($city->new_lat && $city->new_lng)){
+            $city->actual = '';
+        }
+        $city->save();
+        if( $city->actual=='') return 'empty';
+        return $city->actual;
+    }
+    public function set(){
+        $s = new SetActualCoordinates();
+        $s->cycleAll();
+    }
 
 
     /**

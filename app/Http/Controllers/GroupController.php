@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\support\SetActualCoordinates;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -17,8 +18,8 @@ class GroupController extends Controller
     {
 
         $groups = DB::table('geo_groups')
-        ->select("id","name")
-        ->get();
+            ->select("id","name")
+            ->get();
         return view('welcome', [
             'groups'=> $groups,
 
@@ -48,7 +49,7 @@ class GroupController extends Controller
             $regions = DB::table('geo_regions')
                 ->where('name','LIKE',"%$search%")
                 ->get();
-            }
+        }
         return $regions;
     }
     public function dataAjaxDistrict(Request $request){
@@ -76,9 +77,9 @@ class GroupController extends Controller
                 ->get();
         }else{
 
-        $districts = DB::table('geo_districts')
-            ->where('name','LIKE',"%$search%")
-            ->get();
+            $districts = DB::table('geo_districts')
+                ->where('name','LIKE',"%$search%")
+                ->get();
         }
 
 
@@ -88,32 +89,32 @@ class GroupController extends Controller
     {
 
         $search=$request["value"];
-            $cities = DB::table('geo_cities')
-                    ->select("geo_cities.*",
-                        "geo_regions.name as region_name",
-                        "geo_districts.name as district_name"
-                    )
-                    ->join("geo_regions", "geo_regions.id", "=", "geo_cities.region_id")
-                    ->join("geo_districts", "geo_districts.id", "=", "geo_cities.district_id")
-                    ->where('geo_cities.name','LIKE',"%$search%")
-            		->get();
+        $cities = DB::table('geo_cities')
+            ->select("geo_cities.*",
+                "geo_regions.name as region_name",
+                "geo_districts.name as district_name"
+            )
+            ->join("geo_regions", "geo_regions.id", "=", "geo_cities.region_id")
+            ->join("geo_districts", "geo_districts.id", "=", "geo_cities.district_id")
+            ->where('geo_cities.name','LIKE',"%$search%");
 
-            if($request['region']!=0) {
-                $cities = DB::table('geo_cities')
 
-                    ->where('name', 'LIKE', "%$search%")
-                    ->where("region_id", $request['region'])
-                    ->get();
-            }
-        if($request['district']!=0&&$request['table']!="regions"){
-            $cities = DB::table('geo_cities')
-                ->where('name','LIKE',"%$search%")
-                ->where("region_id",$request['region'])
-                ->where("district_id",$request['district'])
-                ->get();
+        if($request['region']!=0) {
+            $cities = $cities->where("geo_cities.region_id", $request['region']);
         }
-        return response()->json($cities);
+        if($request['district']!=0&&$request['table']!="regions"){
+            $cities = $cities->where("geo_cities.district_id", $request['district']);
+//            $cities = DB::table('geo_cities')
+//                ->where('name','LIKE',"%$search%")
+//                ->where("region_id",$request['region'])
+//                ->where("district_id",$request['district']);
+        }
+
+        $s = new SetActualCoordinates($cities->get());
+        return response()->json($cities->get());
+        return response()->json($s->getActualCoordinates());
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -149,13 +150,13 @@ class GroupController extends Controller
 //        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 //       $server_output = curl_exec($ch);
 //        curl_close($ch);
-    //    dump(json_decode($server_output));
-       // dump(json_decode($server_output)[0]->lon);
+        //    dump(json_decode($server_output));
+        // dump(json_decode($server_output)[0]->lon);
         $regions = DB::table('geo_regions')
             ->select("id","name")
             ->get();
         $cities = DB::table('geo_cities')
-           ->select("id","name","region_id","timestamp")
+            ->select("id","name","region_id","timestamp")
             ->get();
 
 
@@ -165,9 +166,9 @@ class GroupController extends Controller
         for($i=0;$i<count($cities);$i++){
             for($j=0;$j<count($regions);$j++){
                 if($regions[$j]->id==$cities[$i]->region_id&&$cities[$i]->timestamp=="0"){
-                   // dump ($cities[$i]->name);
-                   // dump ($cities[$i]->id);
-                   // dump ($regions[$j]->name);
+                    // dump ($cities[$i]->name);
+                    // dump ($cities[$i]->id);
+                    // dump ($regions[$j]->name);
                     $ch = curl_init("https://nominatim.openstreetmap.org/search?city=".urlencode($cities[$i]->name)."&state=".urlencode($regions[$j]->name)."&country=Украина&format=json");
                     curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36');
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -187,7 +188,7 @@ class GroupController extends Controller
                 }
             }
         }
-           // dump($regions[0]->id);
+        // dump($regions[0]->id);
         //dump($cities[0]    );
     }
     public function count()
@@ -230,8 +231,8 @@ class GroupController extends Controller
             ->where("id",$request['district'])
             ->value('name');//\local.parking\public
         $cities = DB::table('geo_cities')
-                ->where("region_id",$request['region'])
-                ->get();
+            ->where("region_id",$request['region'])
+            ->get();
         $cities [] = $regions_name;
         $cities [] = "";
         if($request['district']!=0&&$request['table']!="regions"){

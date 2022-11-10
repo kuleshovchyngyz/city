@@ -17,6 +17,6 @@ class geo_cities extends Model
     /**
      * @var array
      */
-    protected $fillable = ['region_id', 'district_id', 'name', 'lat', 'lng'];
+    protected $fillable = ['region_id', 'district_id', 'name', 'lat', 'lng','timestamp','actual','multiple'];
 
 }
