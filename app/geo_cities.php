@@ -14,9 +14,20 @@ use Illuminate\Database\Eloquent\Model;
  */
 class geo_cities extends Model
 {
+    use \Znck\Eloquent\Traits\BelongsToThrough;
     /**
      * @var array
      */
     protected $fillable = ['region_id', 'district_id', 'name', 'lat', 'lng','timestamp','actual','multiple'];
-
+    public function region(){
+        return $this->belongsTo(geo_regions::class,'region_id','id');
+    }
+    public function district(){
+        return $this->belongsTo(geo_districts::class,'district_id','id');
+    }
+    public function group()
+    {
+        return $this->belongsToThrough(geo_groups::class, geo_regions::class,  'region_id',
+            'geo_',[geo_regions::class =>'group_id'  ]);
+    }
 }

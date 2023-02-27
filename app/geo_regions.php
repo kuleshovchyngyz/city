@@ -17,4 +17,9 @@ class geo_regions extends Model
      */
     protected $fillable = ['country_id', 'name', 'group_id'];
 
+    public function cities()
+    {
+        return $this->hasMany(geo_cities::class, 'region_id', 'id');
+    }
+
 }

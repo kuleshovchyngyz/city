@@ -71,7 +71,7 @@
 
 
                 <div class="item-title">Города:</div>
-                <div class="item text-center  overflow-auto" style="height: 433px">
+                <div class="item text-center  overflow-auto" style="height: 433px" id="parentCity" >
 
                     <ul id="cities" class="p-0">
 
@@ -105,11 +105,11 @@
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">
                             долгота(lng):</label>
-                        <input type="text" class="form-control" id="elng">
+                        <input type="text" class="form-control" id="elng" disabled>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">широта(lat):</label>
-                        <input type="text" class="form-control" id="elat">
+                        <input type="text" class="form-control" id="elat" disabled>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between pr-3 pl-3">

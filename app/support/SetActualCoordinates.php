@@ -55,12 +55,9 @@ class SetActualCoordinates
         $this->addMultiple();
         $this->duplicates();
         $this->updateCity();
-
-
     }
     public function duplicates()
     {
-
         $this->dupKeys = $this->query->toBase()->duplicates('multiple')->unique();
 
         foreach ($this->dupKeys as $item) {

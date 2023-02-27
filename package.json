@@ -26,7 +26,9 @@
     },
     "dependencies": {
         "bootstrap": "^4.6.0",
+        "google-maps": "^4.3.3",
         "jquery": "^3.6.0",
-        "select2": "^4.1.0-rc.0"
+        "select2": "^4.1.0-rc.0",
+        "ymaps": "^0.2.1"
     }
 }

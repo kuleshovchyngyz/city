@@ -123,10 +123,11 @@ function filterQuery(name) {
         .done(function(data) {
 
             // show the response
-
+            console.log(data);
             let dataRegions = data[0];
             let dataDistricts = data[1];
             let dataCities = data[2];
+            let fullCities = data[3];
             let region_name = dataCities[dataCities.length-2];
             let district_name = dataCities[dataCities.length-1];
             dataCities.pop();
@@ -156,16 +157,26 @@ function filterQuery(name) {
                     //
                 });
                 //$('#cities').children().remove();
-                dataCities.forEach(function(key) {
+
+                fullCities.forEach(function(key) {
                     //8888
-                    $("#cities").append(`<li class="city list-group-item" data-city-id="${key['id']}" data-actual="${key['actual']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-new_lng="${key['new_lng']}" data-city-new_lat="${key['new_lat']}"><div class="city">${key['name']}</div><div class="belong"></div></li>`);
+                    $("#cities").append(`
+                        <li class="city list-group-item" data-city-id="${key['id']}" data-actual="${key['actual']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-new_lng="${key['new_lng']}" data-city-new_lat="${key['new_lat']}">
+                            <div class="city">${key['name']}</div>
+                            <div class="belong">${key['region_name']}</div>
+                        </li>`);
                     //
                 });
             }
             if (list === "districts") {
                 $('#cities').children().remove();
-                dataCities.forEach(function(key) {
-                    $("#cities").append(`<li class="city list-group-item" data-city-id="${key['id']}" data-actual="${key['actual']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-new_lng="${key['new_lng']}" data-city-new_lat="${key['new_lat']}"><div class="city">${key['name']}</div><div class="belong"></div></li>`);
+                console.log(dataCities)
+                fullCities.forEach(function(key) {
+                    $("#cities").append(`
+                        <li class="city list-group-item" data-city-id="${key['id']}" data-actual="${key['actual']}" data-city-lng="${key['lng']}" data-city-lat="${key['lat']}" data-city-new_lng="${key['new_lng']}" data-city-new_lat="${key['new_lat']}">
+                            <div class="city">${key['name']}</div>
+                            <div class="belong">${key['region_name']},${key['district_name']}</div>
+                        </li>`);
                     //
                 });
             }
@@ -219,7 +230,7 @@ $("ul").on("click", "li.city.list-group-item", function() {
     let actual =$(this).data('actual');
     actual == 'old' ? (
         $("#radio1").prop("checked", true)
-        ) : (
+    ) : (
         $("#radio2").prop("checked", true)
     );
 
@@ -598,10 +609,18 @@ $("#AddCitybutton").on("click", function() {
     })
         .done(function(data) {
 
-            //
 
             $('.messages').children().remove();
             $(".messages").append(`<div class="alert alert-success" role="alert">${data}</div>`);
+
+            $(document).ready(function() {
+                var inputField = $('#searchcity');
+                inputField.val(city);
+                var e = jQuery.Event("keyup");
+                e.which = 13; // enter key code
+                inputField.trigger(e);
+
+            });
 
         })
         .fail(function() {
@@ -716,6 +735,8 @@ $("#UpdateCity").on("click", function() {
             name: $("#inputCity").val(),
             lng: $("#elng").val(),
             lat: $("#elat").val(),
+            new_lng: $("#newlng").val(),
+            new_lat: $("#newlat").val(),
             _token: _token
         };
         $("li.city.list-group-item.active").html($("#inputCity").val());
@@ -729,10 +750,33 @@ $("#UpdateCity").on("click", function() {
             data: formValue1
         })
 
-
             .done(function (data) {
+                console.log('ssssssss '+id)
+                // Wait for 500 milliseconds (0.5 seconds)
+                setTimeout(function() {
+                    // Trigger click event on district element
+                    $('#districts .list-group-item.active').trigger('click');
 
-                //
+                    // Wait for another 500 millisecondsUpdateCity
+                    setTimeout(function() {
+                        // Trigger click event on city element with the given ID
+                        $(`li[data-city-id="${id}"]`).trigger('click');
+                        setTimeout(function() {
+
+                            $(document).ready(function() {
+                                // Get the active list item
+                                var position = $('.city.list-group-item.active').position().top;
+                                console.log(position)
+                                $('#parentCity').scrollTop(position -150);
+
+                            });
+
+                        }, 100);
+
+                    }, 600);
+
+                }, 600);
+
                 $('.messages').children().remove();
                 $(".messages").append(`<div class="alert alert-success" role="alert">${data}</div>`);
             })
@@ -877,7 +921,6 @@ $('#searchgroup').on('keyup', function() {
 
 });
 $('#searchcity').on('keyup', function() {
-
     let value = $(this).val();
     if (value.length > 2) {
 
@@ -908,8 +951,8 @@ $('#searchcity').on('keyup', function() {
             data: formValue
         })
             .done(function(data) {
+                console.log(data)
                 //
-               //
                 if (data.length == 0) {
 
                     $('#cities').children().remove();
@@ -956,4 +999,5 @@ function  ajaxQuery(id,handleData,address) {
 
         });
 }
+
 

@@ -34,9 +34,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [GroupController::class, 'show']);
         Route::get('/', [GroupController::class, 'show'])->name('main');
     Route::post('/regions/search', [GroupController::class, 'search']);
-    Route::post('/city/update/{id}', [CityController::class, 'update']);
+    Route::post('/city/update/{id}', [CityController::class, 'update'])->name('update.city');
     Route::post('/district/update/{id}', [DistrictController::class, 'update']);
     Route::post('/city/store', [CityController::class, 'store']);
+    Route::get('/city/{id}', [CityController::class, 'show']);
     Route::post('/district/store', [DistrictController::class, 'store']);
     Route::get('/city/region/{id}', [CityController::class, 'region']);
     Route::get('/city/delete/{id}', [CityController::class, 'destroy']);
