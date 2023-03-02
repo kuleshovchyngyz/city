@@ -1,6 +1,8 @@
 
 
 import ymaps from "ymaps";
+
+console.log('Tst')
 var curr_lat;
 var curr_lng;
 
