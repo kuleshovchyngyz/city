@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -28,5 +30,13 @@ class HomeController extends Controller
     public function documentation()
     {
         return view('documentation');
+    }
+    public function test()
+    {
+        $time = Carbon::now()->timestamp;
+        DB::table("geo_districts")
+            ->update([
+                'timestamp' => $time
+            ]);
     }
 }

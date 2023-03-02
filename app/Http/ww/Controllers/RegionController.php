@@ -17,20 +17,71 @@ class RegionController extends Controller
 
 
     }
+
     public function dataAjaxRegion(Request $request)
     {
-        $data = [];
+        $search = $request->search;
+        $region_id = $request->regionId;
+        $district_id = $request->districtId;
 
-        if($request->has('q')){
-            $search = $request->q;
-
-            $cities = DB::table('geo_cities')
-                >where('name','LIKE',"%$search%")
+        if($search == ''){
+            //$employees = Employees::orderby('name','asc')->select('id','name')->limit(5)->get();
+            $employees = DB::table('geo_districts')
+                ->select('id','name')
+                ->where('region_id',$region_id)
                 ->get();
-        }
-        return response()->json($data);
-    }
 
+
+            if($region_id>0){
+                $employees = DB::table('geo_districts')
+                            ->select('id','name')
+                            ->where('region_id',$region_id)->get();
+            }
+            if($district_id>0){
+                $employees =  DB::table('geo_districts')
+                            ->select('id','name')
+                            ->where('id',$district_id)->get();
+            }
+            if($district_id>0&&$region_id){
+                $employees =  DB::table('geo_districts')
+                    ->select('id','name')
+                    ->where('region_id',$region_id)
+                    ->where('id',$district_id)->get();
+            }
+        }else{
+             //= Employees::orderby('name','asc')->select('id','name')->where('name', 'like', '%' .$search . '%')->limit(5)->get();
+
+            $employees = DB::table('geo_districts')->select("id","name")->where('name','LIKE',"%$search%")
+                    ->get();
+            if($region_id>0){
+                $employees = DB::table('geo_districts')
+                    ->select('id','name')
+                    ->where('region_id',$region_id)->get();
+            }
+            if($district_id>0){
+                $employees =  DB::table('geo_districts')
+                    ->select('id','name')
+                    ->where('id',$district_id)->get();
+            }
+            if($district_id>0&&$region_id){
+                $employees =  DB::table('geo_districts')
+                    ->select('id','name')
+                    ->where('region_id',$region_id)
+                    ->where('id',$district_id)->get();
+            }
+        }
+
+        $response = array();
+        foreach($employees as $employee){
+            $response[] = array(
+                "id"=>$employee->id,
+                "text"=>$employee->name
+            );
+        }
+
+        echo json_encode($response);
+        exit;
+    }
     /**
      * Show the form for creating a new resource.
      *
