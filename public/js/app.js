@@ -2692,7 +2692,8 @@ $("#UpdateCity").on("click", function () {
       type: 'post',
       data: formValue1
     }).done(function (data) {
-      console.log('ssssssss ' + id);
+      console.log('ddddd ' + id);
+      console.log(data);
       // Wait for 500 milliseconds (0.5 seconds)
       setTimeout(function () {
         // Trigger click event on district element
@@ -2709,7 +2710,7 @@ $("#UpdateCity").on("click", function () {
               console.log(position);
               $('#parentCity').scrollTop(position - 150);
             });
-          }, 100);
+          }, 600);
         }, 600);
       }, 600);
       $('.messages').children().remove();

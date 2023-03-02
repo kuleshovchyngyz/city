@@ -753,7 +753,8 @@ $("#UpdateCity").on("click", function() {
         })
 
             .done(function (data) {
-                console.log('ssssssss '+id)
+                console.log('ddddd '+id)
+                console.log(data)
                 // Wait for 500 milliseconds (0.5 seconds)
                 setTimeout(function() {
                     // Trigger click event on district element
@@ -773,7 +774,7 @@ $("#UpdateCity").on("click", function() {
 
                             });
 
-                        }, 100);
+                        }, 600);
 
                     }, 600);
 
