@@ -143,7 +143,7 @@ class CityController extends Controller
                 'actual' => 'new',
                 'timestamp' => Carbon::now()->timestamp
             ]);
-        return response()->json($request->all());
+        return response()->json("Успешно обновлено");
     }
 
     public function setActual($id)
