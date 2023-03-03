@@ -103,24 +103,26 @@
                 </div>
                 <div class="d-flex justify-content-between pr-3 pl-3">
                     <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">широта(lat):</label>
+                        <input type="text" class="form-control" id="elat" disabled>
+                    </div>
+                    <div class="form-group">
                         <label for="recipient-name" class="col-form-label">
                             долгота(lng):</label>
                         <input type="text" class="form-control" id="elng" disabled>
                     </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">широта(lat):</label>
-                        <input type="text" class="form-control" id="elat" disabled>
-                    </div>
+
                 </div>
                 <div class="d-flex justify-content-between pr-3 pl-3">
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Новая широта(lat):</label>
+                        <input type="text" class="form-control" id="newlat">
+                    </div>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">
                             Новая долгота(lng):</label>
                         <input type="text" class="form-control" id="newlng">
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Новая широта(lat):</label>
-                        <input type="text" class="form-control" id="newlat">
                     </div>
                 </div>
 

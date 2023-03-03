@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('/autocomplete-ajax-city', [\App\Http\Controllers\GroupController::class, 'dataAjaxCity'])->name('apiCity');
 Route::get('/search', [\App\Http\Controllers\GroupController::class, 'searchCity'])->name('apiSearch');
+Route::get('/get', [\App\Http\Controllers\GroupController::class, 'searchAskar'])->name('apiAskar');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
