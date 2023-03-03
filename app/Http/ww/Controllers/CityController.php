@@ -50,7 +50,9 @@ class CityController extends Controller
                 'multiple' => $request['lng'] * $request['lat'],
                 'region_id' => $request['region'],
                 'district_id' => $request['district'],
-                'timestamp' => Carbon::now()->timestamp
+                'timestamp' => Carbon::now()->timestamp,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]);
         return response()->json("Успешно Добавлено");
         //return response()->json($city);
