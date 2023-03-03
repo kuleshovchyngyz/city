@@ -15,10 +15,10 @@ class AskarCityResource extends JsonResource
     public function toArray($request)
     {
         $region = isset($this['region']) ? $this->region->name : '';
-        $district = isset($this['district']) ?  "(район:{$this->district->name})" : '';
+        $district = isset($this['district']) ?  " (район: {$this->district->name})" : '';
         return [
             "id" => $this->id,
-            "text" => "{$this->name},{$region}{$district}",
+            "text" => "{$this->name}, {$region}{$district}",
             "lng" => $this->actual == 'old' ? $this->lng : $this->new_lng,
             "lat" => $this->actual == 'old' ? $this->lat : $this->new_lat,
         ];
