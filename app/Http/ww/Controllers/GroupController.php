@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\geo_cities;
+use App\Http\Resources\AskarCityResource;
 use App\Http\Resources\CityResource;
 use App\support\SetActualCoordinates;
 use Carbon\Carbon;
@@ -362,7 +363,7 @@ class GroupController extends Controller
 
     public function searchCity(Request $request)
     {
-        return CityResource::collection(
+        $result =  CityResource::collection(
             geo_cities::when($request->get('city'), function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->city . '%');
             })
@@ -378,6 +379,28 @@ class GroupController extends Controller
                     });
                 })
                 ->get());
+        return json_decode(json_encode($result),true);
+    }
+ public function searchAskar(Request $request)
+    {
+        return AskarCityResource::collection(
+            geo_cities::when($request->get('city'), function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->city . '%');
+            })
+                ->with(['region', 'district'])
+                ->when($request->has('region'), function ($query) {
+                    $query->whereHas('region', function ($query) {
+                        $query->where('name', 'like', '%' . request('region') . '%');
+                    });
+                })
+                ->when($request->has('district'), function ($query) {
+                    $query->whereHas('district', function ($query) {
+                        $query->where('name', 'like', '%' . request('district') . '%');
+                    });
+                })
+                ->get());
+
+        response()->json($result,200);
     }
 
 
