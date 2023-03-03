@@ -388,6 +388,9 @@ class GroupController extends Controller
                 $q->where('name', 'like', '%' . $request->city . '%');
             })
                 ->with(['region', 'district'])
+                ->when($request->has('city_id'), function ($query) {
+                        $query->where('id',request('city_id'));
+                })
                 ->when($request->has('region'), function ($query) {
                     $query->whereHas('region', function ($query) {
                         $query->where('name', 'like', '%' . request('region') . '%');
@@ -396,6 +399,16 @@ class GroupController extends Controller
                 ->when($request->has('district'), function ($query) {
                     $query->whereHas('district', function ($query) {
                         $query->where('name', 'like', '%' . request('district') . '%');
+                    });
+                })
+                ->when($request->has('region_id'), function ($query) {
+                    $query->whereHas('region', function ($query) {
+                        $query->where('id', request('region_id'));
+                    });
+                })
+                ->when($request->has('district_id'), function ($query) {
+                    $query->whereHas('district', function ($query) {
+                        $query->where('id', request('district_id') );
                     });
                 })
                 ->get());

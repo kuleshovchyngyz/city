@@ -14,6 +14,8 @@ class AskarCityResource extends JsonResource
      */
     public function toArray($request)
     {
+        $region_id = isset($this['region']) ? $this->region->id : null;
+        $district_id = isset($this['district']) ? $this->district->id : null;
         $region = isset($this['region']) ? $this->region->name : '';
         $district = isset($this['district']) ?  " (район: {$this->district->name})" : '';
         return [
@@ -21,6 +23,8 @@ class AskarCityResource extends JsonResource
             "text" => "{$this->name}, {$region}{$district}",
             "lng" => $this->actual == 'old' ? $this->lng : $this->new_lng,
             "lat" => $this->actual == 'old' ? $this->lat : $this->new_lat,
+            "region_id" => $region_id,
+            "district_id" => $district_id,
         ];
     }
 }
