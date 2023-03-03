@@ -402,6 +402,10 @@ class GroupController extends Controller
 
         response()->json($result,200);
     }
+    public function showCity(Request $request, geo_cities $city)
+    {
+        return new AskarCityResource($city);
+    }
 
 
 }
