@@ -18,13 +18,26 @@ class AskarCityResource extends JsonResource
         $district_id = isset($this['district']) ? $this->district->id : null;
         $region = isset($this['region']) ? $this->region->name : '';
         $district = isset($this['district']) ?  " (район: {$this->district->name})" : '';
+
         return [
             "id" => $this->id,
             "text" => "{$this->name}, {$region}{$district}",
             "lng" => $this->actual == 'old' ? $this->lng : $this->new_lng,
             "lat" => $this->actual == 'old' ? $this->lat : $this->new_lat,
-            "region_id" => $region_id,
-            "district_id" => $district_id,
+            "region_id" => [
+                'id'=>$region_id,
+                'name'=>$region
+                ],
+            "district_id" => [
+                'id'=>$district_id,
+                'name'=>$district
+                ],
+            "group"=>$this->whenLoaded('region',function (){
+                return [
+                    'id'=>$this->region->group->id,
+                    'name'=>$this->region->group->name
+                ];
+            }),
         ];
     }
 }

@@ -19,12 +19,20 @@ class CityResource extends JsonResource
             "name" => $this->name,
             "lng" => $this->actual == 'old' ? $this->lng : $this->new_lng,
             "lat" => $this->actual == 'old' ? $this->lat : $this->new_lat,
-            "region"=>$this->whenLoaded('region',function (){
-                return $this->region->name;
-            }),
+
             "district"=>$this->whenLoaded('district',function (){
                 return $this->district->name;
             }),
+            "region"=>$this->whenLoaded('region',function (){
+                return $this->region->name;
+            }),
+            "group"=>$this->whenLoaded('region',function (){
+                return [
+                    'id'=>$this->region->group->id,
+                    'name'=>$this->region->group->name
+                ];
+            }),
+
 
 
 //            "actual"=>$this->actual,
