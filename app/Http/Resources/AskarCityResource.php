@@ -24,11 +24,11 @@ class AskarCityResource extends JsonResource
             "text" => "{$this->name}, {$region}{$district}",
             "lng" => $this->actual == 'old' ? $this->lng : $this->new_lng,
             "lat" => $this->actual == 'old' ? $this->lat : $this->new_lat,
-            "region_id" => [
+            "region" => [
                 'id'=>$region_id,
                 'name'=>$region
                 ],
-            "district_id" => [
+            "district" => [
                 'id'=>$district_id,
                 'name'=>$district
                 ],
