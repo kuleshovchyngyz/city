@@ -22,4 +22,9 @@ class geo_regions extends Model
         return $this->hasMany(geo_cities::class, 'region_id', 'id');
     }
 
+    public function group()
+    {
+        return $this->belongsTo(geo_groups::class, 'group_id', 'id');
+    }
+
 }
