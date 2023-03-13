@@ -30,7 +30,7 @@ class AskarCityResource extends JsonResource
                 ],
             "district" => [
                 'id'=>$district_id,
-                'name'=>$district
+                'name'=>isset($this['district']) ?  "{$this->district->name}" : ''
                 ],
             "group"=>$this->whenLoaded('region',function (){
                 return [
