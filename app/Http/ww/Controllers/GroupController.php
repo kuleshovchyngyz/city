@@ -122,7 +122,7 @@ class GroupController extends Controller
 //        }
 //        return response()->json($cities->get());
 
-         $cities = geo_cities::when($request->get('value'), function ($q) use ($request) {
+        $cities = geo_cities::when($request->get('value'), function ($q) use ($request) {
             $q->where('name', 'like', '%' . $request->value . '%');
         })
             ->with(['region', 'district'])
@@ -139,21 +139,20 @@ class GroupController extends Controller
             ->get()
             ->map(function ($item) {
                 $region = [];
-                if(isset( $item['region'])){
+                if (isset($item['region'])) {
                     $region['region_name'] = $item['region']['name'];
                     $region['region_id'] = $item['region']['id'];
                 }
                 $district = [];
-                if(isset( $item['district'])){
+                if (isset($item['district'])) {
                     $district['district_name'] = $item['district']['name'];
                     $district['district_id'] = $item['district']['id'];
                 }
-                return array_merge($item->toArray(),$region,$district);
+                return array_merge($item->toArray(), $region, $district);
             });
         return $cities;
         return json_encode($cities);
         $s = new SetActualCoordinates($cities);
-
 
 
         return response()->json($s->getActualCoordinates());
@@ -363,7 +362,7 @@ class GroupController extends Controller
 
     public function searchCity(Request $request)
     {
-        $result =  CityResource::collection(
+        $result = CityResource::collection(
             geo_cities::when($request->get('city'), function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->city . '%');
             })
@@ -379,9 +378,10 @@ class GroupController extends Controller
                     });
                 })
                 ->get());
-        return json_decode(json_encode($result),true);
+        return json_decode(json_encode($result), true);
     }
- public function searchAskar(Request $request)
+
+    public function searchAskar(Request $request)
     {
         return AskarCityResource::collection(
             geo_cities::when($request->get('city'), function ($q) use ($request) {
@@ -389,7 +389,7 @@ class GroupController extends Controller
             })
                 ->with(['region', 'district'])
                 ->when($request->has('city_id'), function ($query) {
-                        $query->where('id',request('city_id'));
+                    $query->where('id', request('city_id'));
                 })
                 ->when($request->has('region'), function ($query) {
                     $query->whereHas('region', function ($query) {
@@ -408,16 +408,27 @@ class GroupController extends Controller
                 })
                 ->when($request->has('district_id'), function ($query) {
                     $query->whereHas('district', function ($query) {
-                        $query->where('id', request('district_id') );
+                        $query->where('id', request('district_id'));
                     });
                 })
                 ->get());
 
-        response()->json($result,200);
+        response()->json($result, 200);
     }
+
     public function showCity(Request $request, geo_cities $city)
     {
         return new AskarCityResource($city);
+    }
+
+    public function getcities(Request $request)
+    {
+        if (is_array($request->get('city_ids'))){
+            return AskarCityResource::collection(
+                geo_cities::whereIn('id', $request->get('city_ids'))->get()
+            );
+        }
+        return [];
     }
 
 
