@@ -381,7 +381,83 @@ class GroupController extends Controller
                 ->get());
         return json_decode(json_encode($result),true);
     }
- public function searchAskar(Request $request)
+    public function searchAskar(Request $request)
+    {
+        // Predefined cities with absolute matches
+        $absoluteMatches = [
+            'Москва' => 45470,
+            'Санкт-Петербург' => 43754,
+            'Новосибирск' => 58528,
+            'Екатеринбург' => 81259,
+            'Нижний Новгород' => 52350,
+            'Казань' => 8346,
+            'Челябинск' => 100951,
+            'Омск' => 59684,
+            'Самара' => 77561,
+            'Ростов-на-Дону' => 73179,
+            'Уфа' => 1473,
+            'Красноярск' => 13107,
+            'Воронеж' => 27979,
+            'Пермь' => 66088,
+            'Волгоград' => 24775,
+            'Краснодар' => 12529,
+            'Саратов' => 79913,
+            'Тюмень' => 99758,
+            'Тольятти' => 78287,
+            'Курск' => 39750,
+        ];
+
+        // Fetch filtered cities based on the request
+        $filteredCities = geo_cities::when($request->get('city'), function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->city . '%');
+        })
+            ->with(['region', 'district'])
+            ->when($request->has('region'), function ($query) {
+                $query->whereHas('region', function ($query) {
+                    $query->where('name', 'like', '%' . request('region') . '%');
+                });
+            })
+            ->when($request->has('district'), function ($query) {
+                $query->whereHas('district', function ($query) {
+                    $query->where('name', 'like', '%' . request('district') . '%');
+                });
+            })
+            ->get();
+
+        // Transform filtered cities into resources
+        $filteredResources = AskarCityResource::collection($filteredCities);
+
+        // Check if $request->city is between 1 and 3 characters
+        $cityQuery = $request->get('city');
+        $absoluteResources = [];
+        if ($cityQuery && strlen($cityQuery) >= 1 && strlen($cityQuery) <= 3) {
+            // Filter absolute matches based on the query (partial match)
+            $absoluteResources = collect($absoluteMatches)->filter(function ($id, $name) use ($cityQuery) {
+                return stripos($name, $cityQuery) !== false;
+            })->map(function ($id, $name) {
+                return [
+                    'name' => $name,
+                    'id' => $id,
+                ];
+            })->toArray();
+        }
+
+        // Ensure all absolute matches are added to the top regardless of query
+        if (empty($absoluteResources)) {
+            $absoluteResources = collect($absoluteMatches)->map(function ($id, $name) {
+                return [
+                    'name' => $name,
+                    'id' => $id,
+                ];
+            })->toArray();
+        }
+
+        // Combine absolute matches with filtered results
+        $result = array_merge($absoluteResources, $filteredResources->toArray($request)); // Add absolute matches to the top
+
+        return response()->json($result, 200);
+    }
+ public function searchAskar_back(Request $request)
     {
         return AskarCityResource::collection(
             geo_cities::when($request->get('city'), function ($q) use ($request) {
