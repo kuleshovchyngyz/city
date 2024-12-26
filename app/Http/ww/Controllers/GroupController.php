@@ -434,7 +434,7 @@ class GroupController extends Controller
             $absoluteResources = collect($absoluteMatches)
                 ->map(function ($id, $name) use ($cityQuery) {
                     // Check if the city name contains the query
-                    if (stripos($name, $cityQuery) !== false) {
+
                         return [
                             "id" => $id,
                             "text" => $name,
@@ -450,8 +450,8 @@ class GroupController extends Controller
                             ],
                             "group" => null
                         ];
-                    }
-                    return null; // Exclude non-matching entries
+
+
                 })
                 ->filter() // Remove null entries
                 ->values() // Reindex the collection
