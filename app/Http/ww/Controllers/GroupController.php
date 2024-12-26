@@ -433,8 +433,6 @@ class GroupController extends Controller
             // Include absolute matches, filtering for partial matches
             $absoluteResources = collect($absoluteMatches)
                 ->map(function ($id, $name) use ($cityQuery) {
-                    // Check if the city name contains the query
-
                         return [
                             "id" => $id,
                             "text" => $name,
@@ -450,8 +448,34 @@ class GroupController extends Controller
                             ],
                             "group" => null
                         ];
-
-
+                })
+                ->filter() // Remove null entries
+                ->values() // Reindex the collection
+                ->toArray();
+        }
+        else  {
+            // Include absolute matches, filtering for partial matches
+            $absoluteResources = collect($absoluteMatches)
+                ->map(function ($id, $name) use ($cityQuery) {
+                    // Check if the city name contains the query
+                    if (stripos($name, $cityQuery) !== false) {
+                        return [
+                            "id" => $id,
+                            "text" => $name,
+                            "lng" => null,
+                            "lat" => null,
+                            "region" => [
+                                "id" => null,
+                                "name" => null
+                            ],
+                            "district" => [
+                                "id" => null,
+                                "name" => null
+                            ],
+                            "group" => null
+                        ];
+                    }
+                    return null; // Exclude non-matching entries
                 })
                 ->filter() // Remove null entries
                 ->values() // Reindex the collection
