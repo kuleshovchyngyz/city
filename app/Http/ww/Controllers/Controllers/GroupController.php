@@ -443,7 +443,7 @@ class GroupController extends Controller
         }
 
         // Ensure all absolute matches are added to the top regardless of query
-        if (empty($absoluteResources)) {
+        if (!empty($absoluteResources)) {
             $absoluteResources = collect($absoluteMatches)->map(function ($id, $name) {
                 return [
                     'name' => $name,
