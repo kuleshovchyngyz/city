@@ -425,7 +425,7 @@ class GroupController extends Controller
         Log::info('Search Request:', $request->all());
 
         // Fetch and sort cities
-        $query = geo_cities::when($request->get('city'), function ($q) use ($request) {
+       return  $query = geo_cities::when($request->get('city'), function ($q) use ($request) {
             $q->where('name', 'like', '%' . $request->city . '%');
         })
             ->with(['region', 'district'])
