@@ -384,6 +384,8 @@ class GroupController extends Controller
 
     public function searchAskar(Request $request)
     {
+
+        return 3333333;
         // Log the incoming request for debugging
         Log::info('Search Request:', $request->all());
 
