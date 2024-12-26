@@ -21,6 +21,7 @@ class AskarCityResource extends JsonResource
 
         return [
             "id" => $this->id,
+            "order" => $this->order,
             "text" => "{$this->name}, {$region}{$district}",
             "lng" => $this->actual == 'old' ? $this->lng : $this->new_lng,
             "lat" => $this->actual == 'old' ? $this->lat : $this->new_lat,
