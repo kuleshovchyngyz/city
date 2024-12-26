@@ -381,7 +381,7 @@ class GroupController extends Controller
         return json_decode(json_encode($result), true);
     }
 
-    public function searchAskar1(Request $request)
+    public function searchAskar(Request $request)
     {
         // Predefined cities with absolute matches
         $absoluteMatches = [
