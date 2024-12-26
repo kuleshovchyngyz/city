@@ -445,7 +445,7 @@ class GroupController extends Controller
                 ];
             })->toArray();
         }
-
+        return $absoluteResources;
         // Combine absolute matches with filtered results
         $result = array_merge($absoluteResources, $filteredCities->toArray($request));
 
