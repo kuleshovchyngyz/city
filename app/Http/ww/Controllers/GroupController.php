@@ -415,7 +415,7 @@ class GroupController extends Controller
                         $query->where('id', request('district_id'));
                     });
                 })
-                ->odrderBy('order', 'desc')
+                ->orderBy('order')
                 ->get());
 
         response()->json($result, 200);
