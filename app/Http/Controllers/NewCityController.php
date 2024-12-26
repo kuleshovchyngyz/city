@@ -42,7 +42,7 @@ class NewCityController extends Controller
                     $query->where('id', request('district_id'));
                 });
             })
-            ->orderBy('order', 'asc')
+            ->orderBy('order', 'desc')
             ->get();
 
         return AskarCityResource::collection($results);
