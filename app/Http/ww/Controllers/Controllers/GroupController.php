@@ -459,7 +459,7 @@ class GroupController extends Controller
     }
  public function searchAskar(Request $request)
     {
-        return 234234;
+
         return AskarCityResource::collection(
             geo_cities::when($request->get('city'), function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->city . '%');
