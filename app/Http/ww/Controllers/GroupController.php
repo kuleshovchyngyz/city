@@ -382,7 +382,7 @@ class GroupController extends Controller
     }
     public function searchAskar(Request $request)
     {
-        // Predefined absolute matches with name and id
+        // Predefined absolute matches
         $absoluteMatches = [
             'Москва' => 45470,
             'Санкт-Петербург' => 43754,
@@ -406,7 +406,7 @@ class GroupController extends Controller
             'Курск' => 39750,
         ];
 
-        // Fetch filtered cities based on the request
+        // Fetch filtered cities from the database based on the request
         $filteredCities = geo_cities::when($request->get('city'), function ($q) use ($request) {
             $q->where('name', 'like', '%' . $request->city . '%');
         })
@@ -423,7 +423,7 @@ class GroupController extends Controller
             })
             ->get();
 
-        // Transform filtered cities into desired structure
+        // Transform filtered cities into the desired structure
         $filteredResources = $filteredCities->map(function ($city) {
             return [
                 "id" => $city->id,
@@ -442,10 +442,15 @@ class GroupController extends Controller
             ];
         });
 
-        // Check if $request->city is up to 3 characters and filter absolute matches
+        // Check if the query is 1 to 3 characters long
         $cityQuery = $request->get('city');
-        $absoluteResources = collect($absoluteMatches)
-            ->map(function ($id, $name) {
+        $absoluteResources = [];
+
+        if ($cityQuery && strlen($cityQuery) <= 3) {
+            // Include absolute matches, filtering for partial matches
+            $absoluteResources = collect($absoluteMatches)->filter(function ($id, $name) use ($cityQuery) {
+                return stripos($name, $cityQuery) !== false;
+            })->map(function ($id, $name) {
                 return [
                     "id" => $id,
                     "text" => $name,
@@ -453,37 +458,17 @@ class GroupController extends Controller
                     "lat" => null,
                     "region" => null,
                     "district" => null,
-                    "group" => null,
+                    "group" => null
                 ];
-            });
-
-        if ($cityQuery && strlen($cityQuery) <= 3) {
-            $absoluteResources = $absoluteResources->filter(function ($match) use ($cityQuery) {
-                return stripos($match['text'], $cityQuery) !== false;
-            });
-        }
-
-        // If no matches are found, include all absolute matches
-        if ($absoluteResources->isEmpty()) {
-            $absoluteResources = collect($absoluteMatches)
-                ->map(function ($id, $name) {
-                    return [
-                        "id" => $id,
-                        "text" => $name,
-                        "lng" => null,
-                        "lat" => null,
-                        "region" => null,
-                        "district" => null,
-                        "group" => null,
-                    ];
-                });
+            })->toArray();
         }
 
         // Combine absolute matches with filtered results
-        $result = array_merge($absoluteResources->toArray(), $filteredResources->toArray());
+        $result = array_merge($absoluteResources, $filteredResources->toArray());
 
         return response()->json($result, 200);
     }
+
 
     public function searchAskar222(Request $request)
     {
