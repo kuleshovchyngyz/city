@@ -386,12 +386,10 @@ class GroupController extends Controller
 
     public function searchAskar(Request $request)
     {
-//        return 7777777777;
         return AskarCityResource::collection(
             geo_cities::when($request->get('city'), function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->city . '%');
             })
-                ->orderBy('order')
                 ->with(['region', 'district'])
                 ->when($request->has('city_id'), function ($query) {
                     $query->where('id', request('city_id'));
@@ -416,11 +414,11 @@ class GroupController extends Controller
                         $query->where('id', request('district_id'));
                     });
                 })
-
-                ->get());
-
-        response()->json($result, 200);
+                ->orderBy('order') // Sort by the `order` column AFTER all filters are applied
+                ->get()
+        );
     }
+
 
     public function showCity(Request $request, geo_cities $city)
     {
