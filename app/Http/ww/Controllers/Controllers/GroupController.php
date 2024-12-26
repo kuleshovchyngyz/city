@@ -381,7 +381,7 @@ class GroupController extends Controller
                 ->get());
         return json_decode(json_encode($result),true);
     }
-    public function searchAskar(Request $request)
+    public function searchAskar1(Request $request)
     {
         // Predefined cities with absolute matches
         $absoluteMatches = [
@@ -457,7 +457,7 @@ class GroupController extends Controller
 
         return response()->json($result, 200);
     }
- public function searchAskar_back(Request $request)
+ public function searchAskar(Request $request)
     {
         return AskarCityResource::collection(
             geo_cities::when($request->get('city'), function ($q) use ($request) {
