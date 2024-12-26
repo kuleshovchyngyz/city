@@ -484,7 +484,7 @@ class GroupController extends Controller
 
 
         // Combine absolute matches with filtered results
-        $result = array_merge($absoluteResources, $filteredCities->toArray($request));
+        $result = array_merge($absoluteResources, AskarCityResource::collection($filteredCities)->toArray($request));
 
         return response()->json($result, 200);
     }
