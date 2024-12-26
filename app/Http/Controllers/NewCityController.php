@@ -14,38 +14,76 @@ class NewCityController extends Controller
         // Log the incoming request for debugging
         Log::info('Search Request:', $request->all());
 
-        // Execute and return results
-        $results = geo_cities::when($request->get('city'), function ($q) use ($request) {
-            $q->where('name', 'like', '%' . $request->city . '%');
-        })
-            ->with(['region', 'district'])
-            ->when($request->has('city_id'), function ($query) {
-                $query->where('id', request('city_id'));
-            })
-            ->when($request->has('region'), function ($query) {
-                $query->whereHas('region', function ($query) {
-                    $query->where('name', 'like', '%' . request('region') . '%');
-                });
-            })
-            ->when($request->has('district'), function ($query) {
-                $query->whereHas('district', function ($query) {
-                    $query->where('name', 'like', '%' . request('district') . '%');
-                });
-            })
-            ->when($request->has('region_id'), function ($query) {
-                $query->whereHas('region', function ($query) {
-                    $query->where('id', request('region_id'));
-                });
-            })
-            ->when($request->has('district_id'), function ($query) {
-                $query->whereHas('district', function ($query) {
-                    $query->where('id', request('district_id'));
-                });
-            })
-            ->orderBy('order', 'desc')
-            ->get();
+        // Get the city query
+        $cityQuery = $request->get('city');
 
+        // Ensure at least two characters are entered for the city
+        if (!$cityQuery || strlen($cityQuery) < 3) {
+            $results = geo_cities::when($cityQuery, function ($q) use ($cityQuery) {
+                $q->where('order', 1)
+                    ->where('name', 'like', '%' . $cityQuery . '%');
+            })
+                ->with(['region', 'district'])
+                ->when($request->has('city_id'), function ($query) {
+                    $query->where('id', request('city_id'));
+                })
+                ->when($request->has('region'), function ($query) {
+                    $query->whereHas('region', function ($query) {
+                        $query->where('name', 'like', '%' . request('region') . '%');
+                    });
+                })
+                ->when($request->has('district'), function ($query) {
+                    $query->whereHas('district', function ($query) {
+                        $query->where('name', 'like', '%' . request('district') . '%');
+                    });
+                })
+                ->when($request->has('region_id'), function ($query) {
+                    $query->whereHas('region', function ($query) {
+                        $query->where('id', request('region_id'));
+                    });
+                })
+                ->when($request->has('district_id'), function ($query) {
+                    $query->whereHas('district', function ($query) {
+                        $query->where('id', request('district_id'));
+                    });
+                })
+                ->orderBy('order', 'desc') // Sort by the `order` column in descending order
+                ->get();
+        } else {
+
+            $results = geo_cities::when($cityQuery, function ($q) use ($cityQuery) {
+                $q->where('name', 'like', '%' . $cityQuery . '%');
+            })
+                ->with(['region', 'district'])
+                ->when($request->has('city_id'), function ($query) {
+                    $query->where('id', request('city_id'));
+                })
+                ->when($request->has('region'), function ($query) {
+                    $query->whereHas('region', function ($query) {
+                        $query->where('name', 'like', '%' . request('region') . '%');
+                    });
+                })
+                ->when($request->has('district'), function ($query) {
+                    $query->whereHas('district', function ($query) {
+                        $query->where('name', 'like', '%' . request('district') . '%');
+                    });
+                })
+                ->when($request->has('region_id'), function ($query) {
+                    $query->whereHas('region', function ($query) {
+                        $query->where('id', request('region_id'));
+                    });
+                })
+                ->when($request->has('district_id'), function ($query) {
+                    $query->whereHas('district', function ($query) {
+                        $query->where('id', request('district_id'));
+                    });
+                })
+                ->orderBy('order', 'desc') // Sort by the `order` column in descending order
+                ->get();
+        }
+        // Return the results wrapped in a resource collection
         return AskarCityResource::collection($results);
     }
+
 
 }
