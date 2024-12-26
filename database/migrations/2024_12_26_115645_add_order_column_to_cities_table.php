@@ -13,7 +13,7 @@ class AddOrderColumnToCitiesTable extends Migration
      */
     public function up()
     {
-        Schema::table('cities', function (Blueprint $table) {
+        Schema::table('geo_cities', function (Blueprint $table) {
             $table->integer('order')->nullable()->after('name');
         });
     }
@@ -25,7 +25,7 @@ class AddOrderColumnToCitiesTable extends Migration
      */
     public function down()
     {
-        Schema::table('cities', function (Blueprint $table) {
+        Schema::table('geo_cities', function (Blueprint $table) {
             $table->dropColumn('order');
         });
     }
