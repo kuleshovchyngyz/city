@@ -423,24 +423,7 @@ class GroupController extends Controller
             })
             ->get();
 
-        // Transform filtered cities into the desired structure
-        $filteredResources = $filteredCities->map(function ($city) {
-            return [
-                "id" => $city->id,
-                "text" => $city->name,
-                "lng" => $city->lng ?? null,
-                "lat" => $city->lat ?? null,
-                "region" => $city->region ? [
-                    "id" => $city->region->id,
-                    "name" => $city->region->name
-                ] : null,
-                "district" => $city->district ? [
-                    "id" => $city->district->id,
-                    "name" => $city->district->name
-                ] : null,
-                "group" => null
-            ];
-        });
+
 
         // Check if the query is 1 to 3 characters long
         $cityQuery = $request->get('city');
@@ -464,7 +447,7 @@ class GroupController extends Controller
         }
 
         // Combine absolute matches with filtered results
-        $result = array_merge($absoluteResources, $filteredResources->toArray());
+        $result = array_merge($absoluteResources, $filteredCities->toArray($request));
 
         return response()->json($result, 200);
     }
