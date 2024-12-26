@@ -391,6 +391,7 @@ class GroupController extends Controller
             geo_cities::when($request->get('city'), function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->city . '%');
             })
+                ->orderBy('order')
                 ->with(['region', 'district'])
                 ->when($request->has('city_id'), function ($query) {
                     $query->where('id', request('city_id'));
@@ -415,7 +416,7 @@ class GroupController extends Controller
                         $query->where('id', request('district_id'));
                     });
                 })
-                ->orderBy('order')
+
                 ->get());
 
         response()->json($result, 200);
