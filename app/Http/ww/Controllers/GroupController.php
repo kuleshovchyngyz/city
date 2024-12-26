@@ -382,50 +382,13 @@ class GroupController extends Controller
     }
 
 
-
-
-    public function searchAskar1(Request $request)
-    {
-        return AskarCityResource::collection(
-            geo_cities::when($request->get('city'), function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->city . '%');
-            })
-                ->with(['region', 'district'])
-                ->when($request->has('city_id'), function ($query) {
-                    $query->where('id', request('city_id'));
-                })
-                ->when($request->has('region'), function ($query) {
-                    $query->whereHas('region', function ($query) {
-                        $query->where('name', 'like', '%' . request('region') . '%');
-                    });
-                })
-                ->when($request->has('district'), function ($query) {
-                    $query->whereHas('district', function ($query) {
-                        $query->where('name', 'like', '%' . request('district') . '%');
-                    });
-                })
-                ->when($request->has('region_id'), function ($query) {
-                    $query->whereHas('region', function ($query) {
-                        $query->where('id', request('region_id'));
-                    });
-                })
-                ->when($request->has('district_id'), function ($query) {
-                    $query->whereHas('district', function ($query) {
-                        $query->where('id', request('district_id'));
-                    });
-                })
-                ->orderBy('order') // Sort by the `order` column AFTER all filters are applied
-                ->get()
-        );
-    }
-
     public function searchAskar(Request $request)
     {
         // Log the incoming request for debugging
         Log::info('Search Request:', $request->all());
 
         // Fetch and sort cities
-       return  $query = geo_cities::when($request->get('city'), function ($q) use ($request) {
+       return $query = geo_cities::when($request->get('city'), function ($q) use ($request) {
             $q->where('name', 'like', '%' . $request->city . '%');
         })
             ->with(['region', 'district'])
@@ -493,6 +456,43 @@ class GroupController extends Controller
     }
 
 
+    public function searchAskar1(Request $request)
+    {
+//        return 7777777777;
+        return AskarCityResource::collection(
+            geo_cities::when($request->get('city'), function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->city . '%');
+            })
+                ->orderBy('order')
+                ->with(['region', 'district'])
+                ->when($request->has('city_id'), function ($query) {
+                    $query->where('id', request('city_id'));
+                })
+                ->when($request->has('region'), function ($query) {
+                    $query->whereHas('region', function ($query) {
+                        $query->where('name', 'like', '%' . request('region') . '%');
+                    });
+                })
+                ->when($request->has('district'), function ($query) {
+                    $query->whereHas('district', function ($query) {
+                        $query->where('name', 'like', '%' . request('district') . '%');
+                    });
+                })
+                ->when($request->has('region_id'), function ($query) {
+                    $query->whereHas('region', function ($query) {
+                        $query->where('id', request('region_id'));
+                    });
+                })
+                ->when($request->has('district_id'), function ($query) {
+                    $query->whereHas('district', function ($query) {
+                        $query->where('id', request('district_id'));
+                    });
+                })
+
+                ->get());
+
+        response()->json($result, 200);
+    }
 
     public function showCity(Request $request, geo_cities $city)
     {
