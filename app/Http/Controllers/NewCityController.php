@@ -12,14 +12,14 @@ class NewCityController extends Controller
     public function searchAskar(Request $request)
     {
         // Log the incoming request for debugging
-        Log::info('Search Request:', $request->all());
+
 
         // Get the city query
         $cityQuery = $request->get('city');
-Log::info(strlen($cityQuery));
+
         // Ensure at least two characters are entered for the city
-        if (strlen($cityQuery) > 0 && strlen($cityQuery) < 4) {
-            Log::info('City query is less than 4 characters');
+        if (mb_strlen($cityQuery) > 0 && mb_strlen($cityQuery) < 4) {
+
             $results = geo_cities::when($cityQuery, function ($q) use ($cityQuery) {
                 $q->whereNotNull('order')
                     ->where('name', 'like', '%' . $cityQuery . '%');
