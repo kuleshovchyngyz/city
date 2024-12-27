@@ -20,7 +20,7 @@ class NewCityController extends Controller
         // Ensure at least two characters are entered for the city
         if (!$cityQuery || strlen($cityQuery) < 4) {
             $results = geo_cities::when($cityQuery, function ($q) use ($cityQuery) {
-                $q->where('order','<>',0)
+                $q->where('order','<>',null)
                     ->where('name', 'like', '%' . $cityQuery . '%');
             })
                 ->with(['region', 'district'])
