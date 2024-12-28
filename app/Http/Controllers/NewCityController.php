@@ -87,4 +87,14 @@ class NewCityController extends Controller
     }
 
 
+    public function getcities(Request $request)
+    {
+        if (is_array($request->get('city_ids'))){
+            return AskarCityResource::collection(
+                geo_cities::whereIn('id', $request->get('city_ids'))->get()
+            );
+        }
+        return [];
+    }
+
 }
