@@ -18,6 +18,11 @@ Route::get('/search', [\App\Http\Controllers\GroupController::class, 'searchCity
 Route::post('/getcities', [\App\Http\Controllers\NewCityController::class, 'getcities'])->name('getcities');
 Route::get('/get', [\App\Http\Controllers\NewCityController::class, 'searchAskar'])->name('apiAskar');
 Route::get('/city/{city}', [\App\Http\Controllers\GroupController::class, 'showCity'])->name('apiShow');
+
+
+Route::get('/', [\App\Http\Controllers\GroupController::class, 'show'])->name('main');
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
