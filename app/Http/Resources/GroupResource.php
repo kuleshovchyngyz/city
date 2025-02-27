@@ -17,8 +17,7 @@ class GroupResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
-
-            "region"=>$this->whenLoaded('regions'),
+            "regions"=>$this->whenLoaded('regions'),
 
         ];
     }
