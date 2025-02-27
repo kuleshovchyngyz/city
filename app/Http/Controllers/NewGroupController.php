@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\geo_cities;
+use App\geo_groups;
 use App\Http\Resources\AskarCityResource;
 use App\Http\Resources\CityResource;
 use App\Http\Resources\GroupResource;
@@ -22,8 +23,7 @@ class NewGroupController extends Controller
     public function index()
     {
 
-        $groups = DB::table('geo_groups')
-            ->with('regions')
+        $groups = geo_groups::with('regions')
             ->select("id", "name")
             ->get();
         return GroupResource::collection($groups);
