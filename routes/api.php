@@ -20,7 +20,7 @@ Route::get('/get', [\App\Http\Controllers\NewCityController::class, 'searchAskar
 Route::get('/city/{city}', [\App\Http\Controllers\GroupController::class, 'showCity'])->name('apiShow');
 
 
-Route::post('/autocomplete-ajax-region', [App\Http\Controllers\GroupController::class, 'dataAjaxRegion']);
+Route::get('/region', [\App\Http\Controllers\NewGroupController::class, 'index']);
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
