@@ -20,9 +20,7 @@ class GroupResource extends JsonResource
             "lng" => $this->actual == 'old' ? $this->lng : $this->new_lng,
             "lat" => $this->actual == 'old' ? $this->lat : $this->new_lat,
 
-            "region"=>$this->whenLoaded('region',function (){
-                return $this->region->name;
-            })
+            "region"=>$this->whenLoaded('region'),
 
         ];
     }

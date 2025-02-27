@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\geo_cities;
 use App\Http\Resources\AskarCityResource;
 use App\Http\Resources\CityResource;
+use App\Http\Resources\GroupResource;
 use App\support\SetActualCoordinates;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,10 +22,11 @@ class NewGroupController extends Controller
     public function index()
     {
 
-        return $groups = DB::table('geo_groups')
+        $groups = DB::table('geo_groups')
             ->with('regions')
             ->select("id", "name")
             ->get();
+        return GroupResource::collection($groups);
 
 
     }
