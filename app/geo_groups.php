@@ -18,7 +18,7 @@ class geo_groups extends Model
     protected $fillable = ['country_id', 'name', 'posi'];
 
     public function  geo_regions(){
-        return $this->hasMany('App\geo_regions');
+        return $this->hasMany('App\geo_regions','group_id','id');
     }
 
 }
