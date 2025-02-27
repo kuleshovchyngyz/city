@@ -20,8 +20,9 @@ Route::get('/get', [\App\Http\Controllers\NewCityController::class, 'searchAskar
 Route::get('/city/{city}', [\App\Http\Controllers\GroupController::class, 'showCity'])->name('apiShow');
 
 
-Route::get('/region', [\App\Http\Controllers\NewGroupController::class, 'index']);
+Route::get('/groups', [\App\Http\Controllers\NewGroupController::class, 'index']);
 
+Route::get('/groups/{id}', [\App\Http\Controllers\NewGroupController::class, 'show']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

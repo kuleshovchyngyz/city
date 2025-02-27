@@ -22,8 +22,10 @@ class NewGroupController extends Controller
     {
 
         return $groups = DB::table('geo_groups')
+            ->with('regions')
             ->select("id", "name")
             ->get();
+
 
     }
 
@@ -313,15 +315,14 @@ class NewGroupController extends Controller
         return response()->json($stack);
     }
 
-    public function show()
+    public function show($id)
     {
-        $groups = DB::table('geo_groups')
+        $groups = DB::table('geo_regions')
             ->select("id", "name")
+            ->where("group_id", $id)
             ->get();
-        return view('welcome', [
-            'groups' => $groups,
 
-        ]);
+
     }
 
     /**
