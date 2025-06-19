@@ -9,6 +9,7 @@ use App\support\SetActualCoordinates;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class GroupController extends Controller
@@ -362,6 +363,8 @@ class GroupController extends Controller
 
     public function searchCity(Request $request)
     {
+        Log::info('22');
+        Log::info($request->get('city', 'No city provided'));
         $result = CityResource::collection(
             geo_cities::when($request->get('city'), function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->city . '%');

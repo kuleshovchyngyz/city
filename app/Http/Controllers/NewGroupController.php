@@ -364,6 +364,7 @@ class NewGroupController extends Controller
 
     public function searchCity(Request $request)
     {
+        Log::info('11');
         Log::info($request->get('city', 'No city provided'));
         $result =  CityResource::collection(
             geo_cities::when($request->get('city'), function ($q) use ($request) {
