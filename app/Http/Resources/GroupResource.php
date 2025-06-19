@@ -18,7 +18,6 @@ class GroupResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "regions"=>$this->whenLoaded('regions'),
-
         ];
     }
 }
