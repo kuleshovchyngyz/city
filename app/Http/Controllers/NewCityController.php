@@ -13,14 +13,10 @@ class NewCityController extends Controller
     {
         // Log the incoming request for debugging
 
-
-        Log::info('11');
-        Log::info($request->get('city', 'No city provided'));
         $cityQuery = $request->get('city');
 
         // Ensure at least two characters are entered for the city
         if (mb_strlen($cityQuery) > 0 && mb_strlen($cityQuery) < 4) {
-            Log::info('inside if condition');
             $results = geo_cities::when($cityQuery, function ($q) use ($cityQuery) {
                 $q->where(function($query) use ($cityQuery) {
                     $query->whereNotNull('order')
