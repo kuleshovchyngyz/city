@@ -19,7 +19,8 @@ class geo_cities extends Model
      * @var array
      */
     protected $with = ['region'];
-    protected $fillable = ['region_id', 'district_id', 'name', 'lat', 'lng','timestamp','actual','multiple'];
+//    protected $fillable = ['region_id', 'district_id', 'name', 'lat', 'lng','timestamp','actual','multiple'];
+    protected $guarded = [];
     public function region(){
         return $this->belongsTo(geo_regions::class,'region_id','id');
     }

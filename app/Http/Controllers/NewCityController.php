@@ -22,8 +22,13 @@ class NewCityController extends Controller
         if (mb_strlen($cityQuery) > 0 && mb_strlen($cityQuery) < 4) {
             Log::info('inside if condition');
             $results = geo_cities::when($cityQuery, function ($q) use ($cityQuery) {
-                $q->whereNotNull('order')
+                $q->where(function($query) use ($cityQuery) {
+                    $query->whereNotNull('order')
+                        ->orWhere('length', 3); // Add this condition
+                })
                     ->where('name', 'like', '%' . $cityQuery . '%');
+//                $q->whereNotNull('order')
+//                    ->where('name', 'like', '%' . $cityQuery . '%');
             })
                 ->with(['region', 'district'])
                 ->when($request->has('city_id'), function ($query) {
