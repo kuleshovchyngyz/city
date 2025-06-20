@@ -14,7 +14,8 @@ class NewCityController extends Controller
         // Log the incoming request for debugging
 
 
-        // Get the city query
+        Log::info('11');
+        Log::info($request->get('city', 'No city provided'));
         $cityQuery = $request->get('city');
 
         // Ensure at least two characters are entered for the city
