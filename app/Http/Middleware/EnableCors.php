@@ -9,9 +9,14 @@ class EnableCors
 {
     public function handle($request, Closure $next)
     {
-        $allowedOrigins = ['http://localhost:5173'];
+        $allowedOrigins = [
+            'http://localhost:5173',
+            'https://test.vinz.ru',
+            'https://vinz.ru',
+            'https://www.test.vinz.ru'
+        ];
         $origin = $request->header('Origin');
-        
+
         // Handle preflight requests
         if ($request->isMethod('OPTIONS')) {
             $response = response('', 200);
@@ -26,7 +31,7 @@ class EnableCors
             $response->headers->set('Access-Control-Allow-Credentials', 'true');
             $response->headers->set('Vary', 'Origin');
         }
-        
+
         return $response;
     }
 }
