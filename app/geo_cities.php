@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRelationships;
 
 /**
  * @property int $id
@@ -15,7 +14,6 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRelationships;
  */
 class geo_cities extends Model
 {
-    use HasRelationships;
     /**
      * @var array
      */
@@ -30,7 +28,6 @@ class geo_cities extends Model
     }
     public function group()
     {
-        return $this->belongsToThrough(geo_groups::class, geo_regions::class,  'region_id',
-            'geo_',[geo_regions::class =>'group_id'  ]);
+        return $this->region->group();
     }
 }
