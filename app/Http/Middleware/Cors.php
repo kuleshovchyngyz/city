@@ -8,31 +8,32 @@ class Cors
 {
     public function handle($request, Closure $next)
     {
-        $allowedOrigins = ['https://test.vinz.ru'];
+        $allowedOrigins = ['*'];
         $origin = $request->header('Origin');
-        
-        if (in_array($origin, $allowedOrigins)) {
-            $headers = [
-                'Access-Control-Allow-Origin' => $origin,
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With, X-CSRF-TOKEN, Accept',
-                'Access-Control-Allow-Credentials' => 'true',
-                'Vary' => 'Origin'
-            ];
 
-            if ($request->isMethod('OPTIONS')) {
-                return response()->json('OK', 200, $headers);
-            }
+        // Always set the headers, but only allow specific origins
+        $headers = [
+            'Access-Control-Allow-Origin' => in_array($origin, $allowedOrigins) ? $origin : '',
+            'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With, X-CSRF-TOKEN, Accept',
+            'Access-Control-Allow-Credentials' => 'true',
+            'Vary' => 'Origin'
+        ];
 
-            $response = $next($request);
-
-            foreach ($headers as $key => $value) {
-                $response->headers->set($key, $value);
-            }
-
-            return $response;
+        // Handle preflight requests
+        if ($request->isMethod('OPTIONS')) {
+            return response()->json('OK', 200, $headers);
         }
 
-        return $next($request);
+        $response = $next($request);
+
+        // Add headers to the response
+        foreach ($headers as $key => $value) {
+            if (!empty($value)) {
+                $response->headers->set($key, $value);
+            }
+        }
+
+        return $response;
     }
 }
