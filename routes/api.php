@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Handle preflight requests
-Route::options('{any}', function() {
-    return response()->json([], 200);
+// Handle preflight requests for all API routes
+Route::options('/{any}', function () {
+    return response()->noContent(200);
 })->where('any', '.*');
 
-// API routes with CORS middleware
+// Apply CORS middleware to all API routes
 Route::middleware(['cors'])->group(function () {
     Route::post('/autocomplete-ajax-city', [\App\Http\Controllers\GroupController::class, 'dataAjaxCity'])->name('apiCity');
     Route::get('/search', [\App\Http\Controllers\GroupController::class, 'searchCity'])->name('apiSearch');

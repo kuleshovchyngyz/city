@@ -18,12 +18,15 @@ return [
         'Authorization',
         'X-Requested-With',
         'X-CSRF-TOKEN',
-        'Accept'
+        'Accept',
+        'Origin'
     ],
 
     'exposed_headers' => [
         'Authorization',
-        'X-CSRF-TOKEN'
+        'X-CSRF-TOKEN',
+        'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Credentials'
     ],
 
     'max_age' => 0,
