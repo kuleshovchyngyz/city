@@ -15,12 +15,13 @@ class CorsMiddleware
         ]);
         $allowedOrigins = [
             'https://test.vinz.ru',
+            'https://vinz.ru',
             'https://www.test.vinz.ru',
             'http://localhost:5173'
         ];
 
         $origin = $request->header('Origin');
-        
+
         if (in_array($origin, $allowedOrigins)) {
             $headers = [
                 'Access-Control-Allow-Origin'      => $origin,
@@ -35,11 +36,11 @@ class CorsMiddleware
             }
 
             $response = $next($request);
-            
+
             foreach($headers as $key => $value) {
                 $response->headers->set($key, $value);
             }
-            
+
             return $response;
         }
 
