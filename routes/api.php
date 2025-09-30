@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+*/Route::options('{any}', function() {
+    return response('', 200);
+})->where('any', '.*');
 Route::post('/autocomplete-ajax-city', [\App\Http\Controllers\GroupController::class, 'dataAjaxCity'])->name('apiCity');
 Route::get('/search', [\App\Http\Controllers\GroupController::class, 'searchCity'])->name('apiSearch');
 Route::post('/getcities', [\App\Http\Controllers\NewCityController::class, 'getcities'])->name('getcities');
