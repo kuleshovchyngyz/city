@@ -113,6 +113,9 @@
       <path value="$PROJECT_DIR$/vendor/fruitcake/php-cors" />
       <path value="$PROJECT_DIR$/vendor/fruitcake/laravel-cors" />
       <path value="$PROJECT_DIR$/vendor/asm89/stack-cors" />
+      <path value="$PROJECT_DIR$/vendor/staudenmeir/laravel-cte" />
+      <path value="$PROJECT_DIR$/vendor/staudenmeir/laravel-adjacency-list" />
+      <path value="$PROJECT_DIR$/vendor/staudenmeir/eloquent-has-many-deep-contracts" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1">

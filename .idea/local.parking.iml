@@ -120,6 +120,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/fruitcake/php-cors" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/fruitcake/laravel-cors" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/asm89/stack-cors" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/staudenmeir/laravel-cte" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/staudenmeir/laravel-adjacency-list" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/staudenmeir/eloquent-has-many-deep-contracts" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

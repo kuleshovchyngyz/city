@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRelationships;
 
 /**
  * @property int $id
