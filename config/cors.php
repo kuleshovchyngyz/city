@@ -1,33 +1,17 @@
 <?php
 
 return [
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['*'],
 
-    'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
-        'https://test.vinz.ru',
-        'https://www.test.vinz.ru',
-        'http://localhost:5173'
-    ],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => [
-        'Content-Type',
-        'Authorization',
-        'X-Requested-With',
-        'X-CSRF-TOKEN',
-        'Accept',
-        'Origin'
-    ],
+    'allowed_headers' => ['*'],
 
-    'exposed_headers' => [
-        'Authorization',
-        'X-CSRF-TOKEN',
-        'Access-Control-Allow-Origin',
-        'Access-Control-Allow-Credentials'
-    ],
+    'exposed_headers' => [],
 
     'max_age' => 0,
 

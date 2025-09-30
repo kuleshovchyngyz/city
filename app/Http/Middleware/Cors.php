@@ -11,11 +11,11 @@ class Cors
         $allowedOrigins = ['*'];
         $origin = $request->header('Origin');
 
-        // Always set the headers, but only allow specific origins
+        // Allow all origins and set CORS headers
         $headers = [
-            'Access-Control-Allow-Origin' => in_array($origin, $allowedOrigins) ? $origin : '',
+            'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With, X-CSRF-TOKEN, Accept',
+            'Access-Control-Allow-Headers' => '*',
             'Access-Control-Allow-Credentials' => 'true',
             'Vary' => 'Origin'
         ];
