@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class geo_cities extends Model
 {
-    use \Znck\Eloquent\Traits\BelongsToThrough;
+    use HasRelationships;
     /**
      * @var array
      */
